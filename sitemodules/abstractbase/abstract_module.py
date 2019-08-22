@@ -33,7 +33,7 @@ class Uploader(ABC):
     Abstract class - framework for easy writing modules.
     overloaded abstract protect method:  _upload_logic.
     overloaded abstract protect property: _file_maxsize.
-    protect methods: _write_result, _verbose_name, _verbose_size,
+    protect methods: _verbose_name, _verbose_size,
                     _get_html_and_url, _post_html_and_url.
     overloaded abstract public property: url.
     protect fields: _counter, _session.
@@ -73,7 +73,8 @@ class Uploader(ABC):
                  tor_port: int = 9050, upload_limit: int = 3,
                  post_req_time_out_sec: int = 60 * 60 * 2,
                  sort_alphabetically: bool = True,
-                 open_folder_with_result: bool = False) -> None:
+                 open_folder_with_result: bool = False,
+                 write_the_results_to_a_file: bool = True) -> None:
         """The main method for calling an instance of a class
 
         :param files_path: dir path with files to be uploaded
@@ -135,6 +136,8 @@ class Uploader(ABC):
         1.rar:other\n1.rar:cur\n2.rar:cur
         :param open_folder_with_result: if true open folder
         with result file in an explorer if it exists.
+        :param write_the_results_to_a_file: if true write new results
+        to the __result_filename
         :return: list of tuple(%upload_name%, %url%)
         if  _upload_logic has a correct return
         """
@@ -161,6 +164,7 @@ class Uploader(ABC):
         self._counter = 0  # successful post request counter
         self.__need_to_sort = sort_alphabetically
         self.__open_result_folder = open_folder_with_result
+        self.__write_result_to_file = write_the_results_to_a_file
         self._session = None  # main asynchronous aiohttp.ClientSession
         #  initialization in the __main_method
         result = self.__loop.run_until_complete(self.__main_method())
@@ -295,7 +299,7 @@ class Uploader(ABC):
                     connector=self.__connector, loop=self.__loop,
                     headers=self.__headers) as self._session:
 
-                tasks = [self._upload_logic(file, filename)
+                tasks = [self.__wrapped_upload_logic(file, filename)
                          for file, filename in self.__files_dict.items()]
                 result = await asyncio.gather(*tasks)
         else:
@@ -324,7 +328,29 @@ class Uploader(ABC):
         finally:
             return result
 
-    async def _write_result(self, filename: str, url: str) -> None:
+    async def __wrapped_upload_logic(self, file, filename):
+        try:
+            arg = await self._upload_logic(file, filename)
+            if len(arg) != 2:
+                print('Error in _upload_logic module. '
+                      'The method should return a tuple of two elements')
+                return arg
+            filename, url = arg
+            if self.__write_result_to_file:
+                if not url:
+                    return filename, url
+                try:
+                    await self.__write_result(filename, url)
+                except UploaderException as e:
+                    print('{} {}'.format(str(e), filename))
+                    return filename, url
+            else:
+                return file, url
+        except Exception as e:
+            print(e)
+            return filename, None
+
+    async def __write_result(self, filename: str, url: str) -> None:
         """
         The method writes arguments (upload_name, url) to a result file.
 

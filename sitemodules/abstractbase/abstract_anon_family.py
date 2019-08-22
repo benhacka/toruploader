@@ -56,8 +56,4 @@ class AnonFamily(Uploader, ABC):
             dl_link = dl_link[0]
             print('{} uploaded as {}: {} [{}/{}]'.format(
                 verbose_name, filename, dl_link, *counter))
-            try:
-                await self._write_result(verbose_name, dl_link)
-            except UploaderException as e:
-                print(e)
             return verbose_name, dl_link

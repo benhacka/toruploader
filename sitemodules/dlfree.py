@@ -57,11 +57,7 @@ class DlFreeModule(Uploader):
                 current_dl_link = current_dl_link[0]
                 print('Got link for {} as {}: {} [{}/{}]'.format(
                     verbose_name, upload_name, current_dl_link, *counter))
-                try:
-                    await self._write_result(verbose_name, current_dl_link)
-                except UploaderException as e:
-                    print('{} for {}'.format(str(e), verbose_name))
-                break
+                return verbose_name, current_dl_link
             else:
                 time.sleep(5)
         if time.time() - start_time > 30 * 60:

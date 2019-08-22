@@ -117,6 +117,11 @@ def arg_parser():
     parser.add_argument('-o', '--open', action='store_true',
                         help=open_folder)
 
+    ingnore_write = """Key for NO write. Write result in file 
+    (w/o key - write)"""
+    parser.add_argument('-nw', '--nwrite', action='store_true',
+                        help=ingnore_write)
+
     args = parser.parse_args()
     main_dict = dict(
         files_path=args.path,
@@ -128,7 +133,8 @@ def arg_parser():
         upload_limit=args.limit,
         post_req_time_out_sec=args.timeout,
         sort_alphabetically=bool(args.nsort ^ 1),
-        open_folder_with_result=args.open
+        open_folder_with_result=args.open,
+        write_the_results_to_a_file=bool(args.nwrite ^ 1)
     )
     return args.site, main_dict
 
