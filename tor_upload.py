@@ -113,7 +113,7 @@ def arg_parser():
     open_folder = """Key for open.
         Open folder
         with result file in an explorer if it exists
-        (w/o key open)"""
+        (with key open)"""
     parser.add_argument('-o', '--open', action='store_true',
                         help=open_folder)
 
