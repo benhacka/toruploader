@@ -204,11 +204,7 @@ We will take into account one feature of this picexch, in order to get a direct 
             link = link[0].replace('thumb', 'upload')
             print('uploaded {}: {} [{}/{}]'.format(
                 verbose_name, link, *counter))
-            try:
-                await self._write_result(verbose_name, link)
-            except UploaderException as e:
-                print(e)
-            return {verbose_name: link}
+            return verbose_name: link
 ```
 
 and now we can add our new module to tor_upload.py
