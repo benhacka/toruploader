@@ -16,7 +16,7 @@ class DlFreeModule(Uploader):
         except UploaderException as e:
             print('{} for {}'.format(str(e), verbose_name))
             return verbose_name, None
-        # Fuck the BeautifulSoup! It sucks!
+        # BeautifulSoup sucks!
         # Regular expressions are our everything!
         up_link = re.findall(r'<form action="/(.*?)" '
                              r'enctype="multipart/form-data"', html)
