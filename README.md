@@ -204,7 +204,7 @@ We will take into account one feature of this picexch, in order to get a direct 
             link = link[0].replace('thumb', 'upload')
             print('uploaded {}: {} [{}/{}]'.format(
                 verbose_name, link, *counter))
-            return verbose_name: link
+            return verbose_name, link
 ```
 
 and now we can add our new module to tor_upload.py
