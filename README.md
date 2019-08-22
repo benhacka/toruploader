@@ -8,7 +8,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/benhacka/toruploader">
-    <img src="https://cdn-12.anonfile.com/w5E6D93fnb/0d76099a-1566506593/simple.png" alt="Logo" width="100" height="100">
+    <img src="https://github.com/benhacka/toruploader/blob/master/gitfiles/img/logo.png" alt="Logo" width="120" height="120">
   </a>
   <h3 align="center">Tor uploader</h3>
 
@@ -172,10 +172,11 @@ Let's take a look at the start page - "Maximalgröße: 10 MB". Great, now we can
 
 Now we need to sniff the traffic to understand upload logic. You can use the standard traffic analyzer for browsers, special software (for example - Charles) or browser plug-ins. I chose this plugin, it is simple and beautiful [Web Sniffer](http://5ms.ru/sniffer/) for test in regular Chrome.
 
-![post req](https://cdn-16.anonfile.com/PfEeDc33nf/adfbd4ac-1566506688/post_req.jpg)
+![post req](https://github.com/benhacka/toruploader/blob/master/gitfiles/img/post_sniff.jpg)
 
 The screenshot shows that the post-request sent to https://www.bilder-upload.eu and answer is also there (without a redirect, this isn't shown on the screenshot). We also see form data on the screenshot. We need to pull out a direct download link on the page that the browser returned to us. I'll use regular expressions for this (I hate BeautifulSoap although I understand its advantages).  
-![get result](https://cdn-08.anonfile.com/gbF7D939nc/4795c35e-1566506735/form.jpg)
+
+![get result](https://github.com/benhacka/toruploader/blob/master/gitfiles/img/result_html.jpg)
 
 We will take into account one feature of this picexch, in order to get a direct link without unnecessary clicks, we need to replace 'thumb' with 'upload' in the preview link. And now we can override _upload_logic!
 
